@@ -2,7 +2,7 @@ Rails.application.routes.draw do
   devise_for :users
   root 'home#top'
 
-  resources :posts, only:[:new, :create, :show]
+  resources :posts, only:[:new, :create, :show, :index]
 
   get "up" => "rails/health#show", as: :rails_health_check
   # Render dynamic PWA files from app/views/pwa/*

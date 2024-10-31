@@ -1,5 +1,5 @@
 class PostsController < ApplicationController
-  before_action :authenticate_user!, except: [:show]
+  before_action :authenticate_user!, except: [:show, :index]
 
   # GETリクエストで空のオブジェクトを作成し、form_withで紐づける
   def new
@@ -11,7 +11,7 @@ class PostsController < ApplicationController
     @post.user_id = current_user.id
     if @post.save
       flash[:notice] = '投稿しました'
-      redirect_to root_path
+      redirect_to posts_path
     else
       flash[:alert] = '投稿に失敗しました'
       render :new
@@ -20,6 +20,10 @@ class PostsController < ApplicationController
 
   def show
     @post = Post.find_by(id: params[:id])
+  end
+
+  def index
+    @posts = Post.limit(10).order(created_at: :desc)
   end
 
   private

@@ -5,6 +5,7 @@ describe 'Post', type: :system do
     driven_by(:rack_test)
     @user = create(:user)
     @post = create(:post, title: 'RSpec学習完了', content: 'System Specを作成した', user_id: @user.id)
+    @post2 = create(:post, title: 'RSpec学習完了 2', content: 'System Specを作成した 2', user_id: @user.id)
   end
 
   # 投稿フォーム
@@ -41,7 +42,7 @@ describe 'Post', type: :system do
       context 'パラメータが正常な場合' do
         it 'Postを作成できる' do
           expect { subject }.to change(Post, :count).by(1)
-          expect(current_path).to eq('/')
+          expect(current_path).to eq('/posts')
           expect(page).to have_content('投稿しました')
         end
       end
@@ -69,6 +70,27 @@ describe 'Post', type: :system do
       expect(page).to have_content('RSpec学習完了')
       expect(page).to have_content('System Specを作成した')
       expect(page).to have_content(@user.nickname)
+    end
+  end
+
+  describe 'ログ一覧機能の検証' do
+    before { visit '/posts' }
+
+    it '1件目のPostの詳細が表示される' do
+      expect(page).to have_content('RSpec学習完了')
+      expect(page).to have_content('System Specを作成した')
+      expect(page).to have_content(@user.nickname)
+    end
+
+    it '2件目のPostの詳細が表示される' do
+      expect(page).to have_content('RSpec学習完了 2')
+      expect(page).to have_content('System Specを作成した 2')
+      expect(page).to have_content(@user.nickname)
+    end
+
+    it '投稿タイトルをクリックすると詳細ページへ遷移する' do
+      click_link 'RSpec学習完了'
+      expect(current_path).to eq("/posts/#{@post.id}")
     end
   end
 end
