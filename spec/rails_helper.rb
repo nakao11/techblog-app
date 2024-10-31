@@ -1,5 +1,6 @@
 # This file is copied to spec/ when you run 'rails generate rspec:install'
 require 'spec_helper'
+require 'capybara/rspec'
 ENV['RAILS_ENV'] ||= 'test'
 require_relative '../config/environment'
 # Prevent database truncation if the environment is production
@@ -45,4 +46,10 @@ RSpec.configure do |config|
 
   # FactoryBot のメソッドを使う際、そのモジュール名 (FactoryBot)を省略できるようにする
   config.include FactoryBot::Syntax::Methods
+
+  Capybara.register_driver :selenium do |app|
+    Capybara::Selenium::Driver.new(app, browser: :chrome)
+  end
+  
+  Capybara.javascript_driver = :selenium
 end
