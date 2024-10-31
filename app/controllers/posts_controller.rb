@@ -1,5 +1,5 @@
 class PostsController < ApplicationController
-  before_action :authenticate_user!
+  before_action :authenticate_user!, except: [:show]
 
   # GETリクエストで空のオブジェクトを作成し、form_withで紐づける
   def new
@@ -16,6 +16,10 @@ class PostsController < ApplicationController
       flash[:alert] = '投稿に失敗しました'
       render :new
     end
+  end
+
+  def show
+    @post = Post.find_by(id: params[:id])
   end
 
   private
