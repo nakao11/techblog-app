@@ -52,4 +52,7 @@ RSpec.configure do |config|
   end
   
   Capybara.javascript_driver = :selenium
+
+  # devise のヘルパーメソッドを使えるように
+  config.include Devise::Test::IntegrationHelpers, type: :system
 end
