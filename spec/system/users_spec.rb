@@ -52,7 +52,7 @@ describe 'Users', type: :system do
         let(:email) { '' }
         it 'ユーザーを作成せず、エラーメッセージを表示する' do
           expect { subject }.not_to change(User, :count)
-          expect(page).to have_content("メールアドレス が入力されていません。")
+          expect(page).to have_content('メールアドレス が入力されていません。')
         end
       end
 
@@ -60,7 +60,7 @@ describe 'Users', type: :system do
         let(:password) { '' }
         it 'ユーザーを作成せず、エラーメッセージを表示する' do
           expect { subject }.not_to change(User, :count)
-          expect(page).to have_content("パスワード が入力されていません。")
+          expect(page).to have_content('パスワード が入力されていません。')
         end
       end
 

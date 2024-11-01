@@ -1,6 +1,14 @@
 class PostsController < ApplicationController
   before_action :authenticate_user!, except: [:show, :index]
 
+  def index
+    @posts = Post.limit(10).order(created_at: :desc)
+  end
+
+  def show
+    @post = Post.find_by(id: params[:id])
+  end
+
   # GETリクエストで空のオブジェクトを作成し、form_withで紐づける
   def new
     @post = Post.new
@@ -18,14 +26,6 @@ class PostsController < ApplicationController
     end
   end
 
-  def show
-    @post = Post.find_by(id: params[:id])
-  end
-
-  def index
-    @posts = Post.limit(10).order(created_at: :desc)
-  end
-
   def destroy
     @post = Post.find_by(id: params[:id])
     if @post.user == current_user
@@ -37,7 +37,7 @@ class PostsController < ApplicationController
 
   private
 
-    def post_params
-      params.require(:post).permit(:title, :content)
-    end
+  def post_params
+    params.require(:post).permit(:title, :content)
+  end
 end
