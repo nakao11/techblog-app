@@ -42,7 +42,7 @@ describe 'Post', type: :system do
       context 'パラメータが正常な場合' do
         it 'Postを作成できる' do
           expect { subject }.to change(Post, :count).by(1)
-          expect(current_path).to eq('/posts')
+          expect(current_path).to eq('/')
           expect(page).to have_content('投稿しました')
         end
       end
@@ -74,7 +74,7 @@ describe 'Post', type: :system do
   end
 
   describe 'ログ一覧機能の検証' do
-    before { visit '/posts' }
+    before { visit '/' }
 
     it '1件目のPostの詳細が表示される' do
       expect(page).to have_content('RSpec学習完了')
@@ -110,7 +110,7 @@ describe 'Post', type: :system do
           click_button '削除'
         end.to change(Post, :count).by(-1)
         # リダイレクト後の画面確認
-        expect(current_path).to eq('/posts')
+        expect(current_path).to eq('/')
         expect(page).to have_content('投稿が削除されました')
         expect(page).not_to have_link("/posts/#{@post.id}")
       end
@@ -128,6 +128,36 @@ describe 'Post', type: :system do
         expect do
           delete post_path(@post)
         end.not_to change(Post, :count)
+      end
+    end
+  end
+
+  describe 'ナビゲーションバーの検証' do
+    context 'ログインしていない場合' do
+      before { visit '/' }
+
+      it 'ログ一覧リンクを表示する' do
+        expect(page).to have_link('ログ一覧', href: '/')
+      end
+
+      it 'ログ投稿リンクを表示しない' do
+        expect(page).not_to have_link('ログ投稿', href: '/posts/new')
+      end
+    end
+
+    context 'ログインしている場合' do
+      before do
+        user = create(:user)
+        sign_in user
+        visit '/'
+      end
+
+      it 'ログ一覧リンクを表示する' do
+        expect(page).to have_link('ログ一覧', href: '/')
+      end
+
+      it 'ログ投稿リンクを表示する' do
+        expect(page).to have_link('ログ投稿', href: '/posts/new')
       end
     end
   end
